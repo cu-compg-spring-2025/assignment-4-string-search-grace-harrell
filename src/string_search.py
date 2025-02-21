@@ -5,6 +5,7 @@ import random
 import argparse
 import matplotlib.pyplot as plt
 import naive_search
+import boyer_moore
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -87,40 +88,112 @@ def test_harness(test_functions,
     return run_times, mem_usages
 
 def main():
+    # args = get_args()
+
+    # text_size_range =  range(args.text_range[0],
+    #                          args.text_range[1],
+    #                          args.text_range[2])
+
+    # test_functions = [naive_search.naive_search]
+
+
+    # run_times, mem_usages = test_harness(test_functions,
+    #                                      text_size_range,
+    #                                      args.pattern_size,
+    #                                      args.rounds)
+
+    # fig, axs = plt.subplots(2,1, figsize=(args.width, args.height))
+    # fig.tight_layout(pad=3.0)
+    # ax = axs[0]
+    # ax.plot(text_size_range, run_times[0], label='Naive')
+    # ax.set_title(f'String Search Performance(|P|= {args.pattern_size})')
+    # ax.set_xlabel('Text size')
+    # ax.set_ylabel('Run time (ns)')
+    # ax.legend(loc='best', frameon=False, ncol=3)
+    # ax.spines['top'].set_visible(False)
+    # ax.spines['right'].set_visible(False)
+
+    # ax = axs[1]
+    # ax.plot(text_size_range, mem_usages[0], label='Naive')
+    # ax.set_xlabel('Text size')
+    # ax.set_ylabel('Memory (bytes)')
+    # ax.legend(loc='best', frameon=False, ncol=3)
+    # ax.spines['top'].set_visible(False)
+    # ax.spines['right'].set_visible(False)
+
+
+    # plt.savefig(args.out_file)
+    # args = get_args()
+
+    # text_size_range =  range(args.text_range[0],
+    #                          args.text_range[1],
+    #                          args.text_range[2])
+
+    # test_functions = [boyer_moore.boyer_moore_search]
+
+
+    # run_times, mem_usages = test_harness(test_functions,
+    #                                      text_size_range,
+    #                                      args.pattern_size,
+    #                                      args.rounds)
+
+    # fig, axs = plt.subplots(2,1, figsize=(args.width, args.height))
+    # fig.tight_layout(pad=3.0)
+    # ax = axs[0]
+    # ax.plot(text_size_range, run_times[0], label='Boyer Moore')
+    # ax.set_title(f'String Search Performance(|P|= {args.pattern_size})')
+    # ax.set_xlabel('Text size')
+    # ax.set_ylabel('Run time (ns)')
+    # ax.legend(loc='best', frameon=False, ncol=3)
+    # ax.spines['top'].set_visible(False)
+    # ax.spines['right'].set_visible(False)
+
+    # ax = axs[1]
+    # ax.plot(text_size_range, mem_usages[0], label='Boyer_Moore')
+    # ax.set_xlabel('Text size')
+    # ax.set_ylabel('Memory (bytes)')
+    # ax.legend(loc='best', frameon=False, ncol=3)
+    # ax.spines['top'].set_visible(False)
+    # ax.spines['right'].set_visible(False)
+
+
+    # plt.savefig(args.out_file)
     args = get_args()
 
-    text_size_range =  range(args.text_range[0],
-                             args.text_range[1],
-                             args.text_range[2])
+    text_size_range = range(args.text_range[0], args.text_range[1], args.text_range[2])
+    
+    # Add both naive_search and boyer_moore_search in the test functions list
+    test_functions = [naive_search.naive_search, boyer_moore.boyer_moore_search]
 
-    test_functions = [naive_search.naive_search]
+    # Run tests and get the results
+    run_times, mem_usages = test_harness(test_functions, text_size_range, args.pattern_size, args.rounds)
 
-
-    run_times, mem_usages = test_harness(test_functions,
-                                         text_size_range,
-                                         args.pattern_size,
-                                         args.rounds)
-
-    fig, axs = plt.subplots(2,1, figsize=(args.width, args.height))
+    # Plotting the results
+    fig, axs = plt.subplots(2, 1, figsize=(args.width, args.height))
     fig.tight_layout(pad=3.0)
+
+    # Plot run times
     ax = axs[0]
-    ax.plot(text_size_range, run_times[0], label='Naive')
-    ax.set_title(f'String Search Performance(|P|= {args.pattern_size})')
+    ax.plot(text_size_range, run_times[0], label='Naive Search', color='blue')  # Naive search line (blue)
+    ax.plot(text_size_range, run_times[1], label='Boyer-Moore', color='red')  # Boyer-Moore line (red)
+    ax.set_title(f'String Search Performance (|P|= {args.pattern_size})')
     ax.set_xlabel('Text size')
     ax.set_ylabel('Run time (ns)')
     ax.legend(loc='best', frameon=False, ncol=3)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
+    # Plot memory usage
     ax = axs[1]
-    ax.plot(text_size_range, mem_usages[0], label='Naive')
+    ax.plot(text_size_range, mem_usages[0], label='Naive Search', color='blue')
+    ax.plot(text_size_range, mem_usages[1], label='Boyer-Moore', color='red')
     ax.set_xlabel('Text size')
-    ax.set_ylabel('Memory (bytes)')
+    ax.set_ylabel('Memory usage (bytes)')
     ax.legend(loc='best', frameon=False, ncol=3)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
 
-
+    # Save the plot to a file
     plt.savefig(args.out_file)
 
 if __name__ == '__main__':
